@@ -49,7 +49,7 @@ required = '0123456789'
 if reg:
     reader = easyocr.Reader(['en'], gpu=True)
 
-ref_boxs = np.array(response.json()['areas'])
+ref_boxs = np.asarray(response.json()['areas'], dtype=int)
 #ref_boxs = [cv2.selectROI("select a Detect Area", frame)]
 
 tracker_types = [
