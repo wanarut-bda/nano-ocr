@@ -166,7 +166,7 @@ while True:
                     cv2.imshow("img_erosion_" + str(i), img_erosion)
                 print(i, ':', ocr_text)
                 if ocr_text.isdigit():
-                    client.publish(topic + '/' + i, int(ocr_text))
+                    client.publish(topic + '/' + str(i), int(ocr_text))
             else:
                 # Tracking failure
                 cv2.putText(frame, "Tracking failure detected", (100, 80),
