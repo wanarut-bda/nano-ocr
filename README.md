@@ -1,15 +1,16 @@
 # Jetson Production Auto-Running Step
-## `disable` auto-update (gui setting)
-## `disable` suspend 5 minutes (gui setting)
-## `enable` auto-login (gui setting)
+## `disable` auto-update (gui setting > Software & Updates > Updates > `Auto check updates: Never`)
+## `disable` suspend 5 minutes (gui setting > Brrightness & Lock > `'Turn screen off'=Never` & `Lock=OFF`)
+## `enable` auto-login (gui setting>User Accounts > Unlock > Automatic `Login=ON`)
+### install zsh & nano
+`$ sudo apt install zsh nano`
+### change default shell to zsh
+`$ chsh -s $(which zsh)` <br>
+`$ reboot` <br>
 ### disable sudo password
 `$ sudo nano /etc/sudoers` <br>
 >\# %sudo  ALL=(ALL:ALL) ALL <br>
 `%sudo ALL=(ALL) NOPASSWD:ALL`
-### install zsh
-`$ sudo apt install zsh nano`
-### change default shell to zsh
-`$ chsh -s $(which zsh)` <br>
 ### clone OCR & Website Built-in code
 `$ git clone https://github.com/wanarut-bda/nano-ocr.git`
 ### edit .zshrc file
