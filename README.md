@@ -6,7 +6,8 @@
 `$ sudo apt install zsh nano`
 ### change default shell to zsh
 `$ chsh -s $(which zsh)` <br>
-`$ reboot` <br>
+`$ sudo reboot` <br>
+## After reboot shell will change to zsh select 0 to creating the file ~/.zshrc
 ### disable sudo password
 `$ sudo nano /etc/sudoers` <br>
 >\# %sudo  ALL=(ALL:ALL) ALL <br>

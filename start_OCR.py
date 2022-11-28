@@ -106,15 +106,15 @@ while True:
     timer = cv2.getTickCount()
 
     try:
-        for i, tracker in enumerate(trackers):
+        for i, ref_box in enumerate(ref_boxs):
             ocr_text = ''
             # Update tracker
             # ok = False
             if track:
-                ok, bbox = tracker.update(frame)
+                ok, bbox = trackers[i].update(frame)
             else:
                 ok = True
-                bbox = ref_boxs[i]
+                bbox = ref_box
 
             # Draw bounding box
             if ok:
