@@ -30,7 +30,9 @@ with open('./yaml/mqtt.yaml') as f:
 topic = mqtt_config['topic']
 
 client = mqtt.Client()
+client.username_pw_set(mqtt_config['username'], mqtt_config['password'])
 client.connect(mqtt_config['host'], int(mqtt_config['port']))
+client.publish(topic + '/health_check', 200)
 
 def try2read_img(path):
     frame = cv2.imread(path)

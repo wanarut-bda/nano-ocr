@@ -24,7 +24,7 @@ def login_page():
     while (True):
         login = input_group("login", [
             input('username', name='username', type=TEXT, required=True),
-            input('password', name='password', type=TEXT, required=True),
+            input('password', name='password', type=PASSWORD, required=True),
         ])
 
         if (login['username'] == admin_yaml['username']
@@ -59,6 +59,8 @@ def mqtt_page():
         input('host', name='host', type=TEXT, required=True, value=mqtt_config['host']),
         input('port', name='port', type=TEXT, required=True, value=mqtt_config['port']),
         input('topic', name='topic', type=TEXT, required=True, value=mqtt_config['topic']),
+        input('username', name='username', type=TEXT, value=mqtt_config['username']),
+        input('password', name='password', type=PASSWORD),
     ], cancelable=True)
 
     if mqtt is not None:

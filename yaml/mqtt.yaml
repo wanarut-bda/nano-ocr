@@ -1,3 +1,5 @@
 host: 192.168.88.55
+password: ''
 port: '1885'
 topic: heart_rates
+username: ''
