@@ -2,18 +2,22 @@ from pywebio.input import *
 from pywebio.output import *
 from pywebio.session import *
 from pywebio.pin import *
-from pywebio import start_server
+from pywebio import start_server, config
 import os
 
 import yaml
 from yaml.loader import SafeLoader
 
+config(title="OCR Setting")
 # Open the file and load the file
 with open('./yaml/admin.yaml') as file:
     admin_yaml = yaml.load(file, Loader=SafeLoader)
 
 def reboot_system():
-    os.system('reboot')
+    confirm = actions('Confirm to Reboot?', ['confirm', 'cancel'],
+                      help_text='Wait 1 minute for restart')
+    if confirm=='confirm':  
+        os.system('reboot')
 
 
 def login_page():
@@ -67,12 +71,13 @@ def config_page():
     img = open('cur_pic.bmp', 'rb').read()
     put_image(img, width='1280px')
     put_html(web_html)
+    put_button('reboot', onclick=reboot_system, small=True)
 
 
 def main():  # PyWebIO application function
-    # login_page()
-    # change_password()
-    # mqtt_page()
+    login_page()
+    change_password()
+    mqtt_page()
     config_page()
 
 
