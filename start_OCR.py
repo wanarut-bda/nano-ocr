@@ -17,6 +17,7 @@ with open('./yaml/config.yaml') as f:
 
 gui = config['display']
 reg = config['recognition']
+track = config['track']
 ratio = config['roi_zoom']
 device_id = config['device_id']
 host_api = config['host_api']
@@ -108,7 +109,12 @@ while True:
         for i, tracker in enumerate(trackers):
             ocr_text = ''
             # Update tracker
-            ok, bbox = tracker.update(frame)
+            # ok = False
+            if track:
+                ok, bbox = tracker.update(frame)
+            else:
+                ok = True
+                bbox = ref_boxs[i]
 
             # Draw bounding box
             if ok:

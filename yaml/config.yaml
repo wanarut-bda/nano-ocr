@@ -3,4 +3,5 @@ device_id: OCR_0001
 host_api: http://192.168.88.55:1880
 recognition: true
 display: false
+track: false
 roi_zoom: 7
