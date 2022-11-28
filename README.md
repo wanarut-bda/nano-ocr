@@ -2,15 +2,16 @@
 ## `disable` auto-update (gui setting > Software & Updates > Updates > `Auto check updates: Never`)
 ## `disable` suspend 5 minutes (gui setting > Brrightness & Lock > `'Turn screen off'=Never` & `Lock=OFF`)
 ## `enable` auto-login (gui setting>User Accounts > Unlock > Automatic `Login=ON`)
+## `add` startup app `terminal` => `gnome-terminal`
 ### install zsh & nano
-`$ sudo apt install zsh nano`
+`$ sudo apt install -y zsh nano`
 ### change default shell to zsh
 `$ chsh -s $(which zsh)` <br>
 ## After reboot shell will change to zsh select 0 to creating the file ~/.zshrc
 ### disable sudo password
 `$ sudo visudo` <br>
 ### add new line in file
->`$USER ALL=(ALL) NOPASSWD: ALL`
+>`$USER ALL=(ALL) NOPASSWD:ALL`
 
 <!-- # Allow members of group sudo to execute any command
 #%sudo  ALL=(ALL:ALL) ALL
