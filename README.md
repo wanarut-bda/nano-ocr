@@ -6,12 +6,11 @@
 `$ sudo apt install zsh nano`
 ### change default shell to zsh
 `$ chsh -s $(which zsh)` <br>
-`$ sudo reboot` <br>
 ## After reboot shell will change to zsh select 0 to creating the file ~/.zshrc
 ### disable sudo password
-`$ sudo nano /etc/sudoers` <br>
->\# %sudo  ALL=(ALL:ALL) ALL <br>
-`%sudo ALL=(ALL) NOPASSWD:ALL`
+`$ sudo visudo` <br>
+### add new line in file
+>`$USER ALL=(ALL) NOPASSWD: ALL`
 ### clone OCR & Website Built-in code
 `$ git clone https://github.com/wanarut-bda/nano-ocr.git`
 ### edit .zshrc file

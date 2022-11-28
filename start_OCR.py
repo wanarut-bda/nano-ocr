@@ -23,7 +23,15 @@ device_id = config['device_id']
 host_api = config['host_api']
 
 api_url = host_api+"/get_areas?device_id="+device_id
-response = requests.get(api_url)
+try:
+    response = requests.get(api_url)
+    areas_data = response.json()
+
+    with open('./yaml/areas.yaml', 'w') as file:
+        yaml.dump(areas_data, file)
+except :
+    with open('./yaml/areas.yaml') as f:
+        areas_data = yaml.load(f, Loader=SafeLoader)
 
 with open('./yaml/mqtt.yaml') as f:
     mqtt_config = yaml.load(f, Loader=SafeLoader)
@@ -52,7 +60,7 @@ required = '0123456789'
 if reg:
     reader = easyocr.Reader(['en'], gpu=True)
 
-ref_boxs = np.asarray(response.json()['areas'], dtype=int)
+ref_boxs = np.asarray(areas_data['areas'], dtype=int)
 #ref_boxs = [cv2.selectROI("select a Detect Area", frame)]
 
 tracker_types = [
