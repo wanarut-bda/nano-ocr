@@ -11,6 +11,12 @@
 `$ sudo visudo` <br>
 ### add new line in file
 >`$USER ALL=(ALL) NOPASSWD: ALL`
+
+<!-- # Allow members of group sudo to execute any command
+#%sudo  ALL=(ALL:ALL) ALL
+%sudo ALL=(ALL) NOPASSWD:ALL
+# See sudoers(5) for more information on "#include" directives: -->
+
 ### clone OCR & Website Built-in code
 `$ git clone https://github.com/wanarut-bda/nano-ocr.git`
 ### edit .zshrc file
