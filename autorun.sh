@@ -7,6 +7,8 @@ do
 done
 
 echo 'Started'
-gnome-terminal -e "bash -c \"sudo python3 start_webIO.py; exec bash\""
-gnome-terminal -e "bash -c \"sudo python3 start_OCR.py; exec bash\""
 gnome-terminal -e "bash -c \"sudo python start_capture.py; exec bash\""
+sleep 2
+gnome-terminal -e "bash -c \"sudo python3 start_webIO.py; exec bash\""
+sleep 3
+gnome-terminal -e "bash -c \"sudo python3 start_OCR.py; exec bash\""

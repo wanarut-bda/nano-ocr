@@ -3,24 +3,40 @@ import easyocr
 import numpy as np
 import yaml
 from yaml.loader import SafeLoader
+import paho.mqtt.client as mqtt
+import requests
 
 (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
 # Open the file and load the file
-with open('config.yaml') as f:
-    data = yaml.load(f, Loader=SafeLoader)
+with open('./yaml/areas.yaml') as f:
+    areas = yaml.load(f, Loader=SafeLoader)
 
-gui = data['display']
-reg = data['recognition']
-ratio = data['roi_zoom']
+with open('./yaml/config.yaml') as f:
+    config = yaml.load(f, Loader=SafeLoader)
 
+gui = config['display']
+reg = config['recognition']
+ratio = config['roi_zoom']
+device_id = config['device_id']
+host_api = config['host_api']
+
+api_url = host_api+"/get_areas?device_id="+device_id
+response = requests.get(api_url)
+
+with open('./yaml/mqtt.yaml') as f:
+    mqtt_config = yaml.load(f, Loader=SafeLoader)
+
+topic = mqtt_config['topic']
+
+client = mqtt.Client()
+client.connect(mqtt_config['host'], mqtt_config['port'])
 
 def try2read_img(path):
     frame = cv2.imread(path)
     while frame is None:
         frame = cv2.imread(path)
     return frame
-
 
 # Read first frame.
 path = r'./cur_pic.bmp'
@@ -33,7 +49,7 @@ required = '0123456789'
 if reg:
     reader = easyocr.Reader(['en'], gpu=True)
 
-ref_boxs = data['areas']
+ref_boxs = response.json()['areas']
 #ref_boxs = [cv2.selectROI("select a Detect Area", frame)]
 
 tracker_types = [
@@ -147,6 +163,8 @@ while True:
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.75, 0, 2)
                     cv2.imshow("img_erosion_" + str(i), img_erosion)
                 print(i, ':', ocr_text)
+                if ocr_text.isdigit():
+                    client.publish(topic + '/' + i, int(ocr_text))
             else:
                 # Tracking failure
                 cv2.putText(frame, "Tracking failure detected", (100, 80),

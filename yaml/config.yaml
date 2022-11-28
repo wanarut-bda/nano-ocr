@@ -1,0 +1,6 @@
+# python script config
+device_id: OCR_0001
+host_api: 192.168.88.55
+recognition: true
+display: false
+roi_zoom: 7
