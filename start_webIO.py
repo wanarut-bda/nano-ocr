@@ -69,9 +69,11 @@ def mqtt_page():
 
 
 def config_page():
-    web_html = open("web_config.html", "r").read()
     img = open('cur_pic.bmp', 'rb').read()
     put_image(img, width='1280px')
+    web_html = open("web_config2.html", "r").read()
+    config_html = open("config.html", "r").read()
+    put_html(config_html)
     put_html(web_html)
     put_button('reboot', onclick=reboot_system, small=True)
 

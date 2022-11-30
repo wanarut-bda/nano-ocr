@@ -1,0 +1,216 @@
+<div id="canvasWrapper">
+    <canvas id="overlay" width="1280" height="720"></canvas>
+    <canvas id="canvas" width="1280" height="720"></canvas>
+  </div>
+  <div id="button_group">
+    <button onclick="saveConfig()" style="min-width: 200px; margin-inline: 24px">
+      Save
+    </button>
+    <button onclick="clearConfig()" style="min-width: 200px; margin-inline: 24px">
+      Clear
+    </button>
+  </div>
+  
+  <style>
+    .pywebio {
+        position: absolute;
+        padding: 50px;
+    }
+  
+    .container {
+        width: 1280px;
+        max-width: 100%;
+        padding-right: 0px;
+        padding-left: 0px;
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+  
+    /* body {
+        background-color: ivory;
+        margin: auto;
+    } */
+  
+    canvas {
+      /* border: 2px solid red; */
+      position: absolute;
+    }
+  
+    #canvasWrapper {
+      /* border: 1px solid green; */
+      position: absolute;
+      top: 50px;
+      left: 50px;
+    }
+  
+    .footer {
+        display: none;
+    }
+  
+    #button_group {
+      padding: 24px;
+      text-align: center;
+    }
+  </style>
+  
+  <script>
+    // get references to the canvas and context
+    var canvas = document.getElementById("canvas");
+    var overlay = document.getElementById("overlay");
+    var ctx = canvas.getContext("2d");
+    var ctxo = overlay.getContext("2d");
+  
+    // style the context
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 3;
+    ctxo.strokeStyle = "blue";
+    ctxo.lineWidth = 3;
+  
+    // calculate where the canvas is on the window
+    // (used to help calculate mouseX/mouseY)
+    var $canvas = $("#canvas");
+    var canvasOffset = $canvas.offset();
+    var offsetX = 50;
+    var offsetY = 50;
+  
+    // this flage is true when the user is dragging the mouse
+    var isDown = false;
+  
+    // these vars will hold the starting mouse position
+    var startX;
+    var startY;
+  
+    var prevStartX = 0;
+    var prevStartY = 0;
+  
+    var prevWidth = 0;
+    var prevHeight = 0;
+  
+    var areas_rect = []
+  
+    function loadConfig() {
+      $.get(host_api+"/get_areas",
+        {
+          token: "oKgHPf4O9g",
+          device_id: device_id,
+        },
+        function(data, status){
+          data = JSON.parse(data);
+          areas_rect = data.areas;
+          
+          areas_rect.forEach(area => {
+            ctxo.strokeRect(area[0], area[1], area[2], area[3]);
+          });
+        });
+    }
+    loadConfig();
+  
+    function saveConfig() {
+      if (confirm("Want to Save?")) {
+        // code saving
+        $.post(host_api+"/update_areas",
+        {
+          areas: areas_rect,
+          token: "oKgHPf4O9g",
+          ip: window.location.href,
+          device_id: device_id,
+        },
+        function(data, status){
+          alert("Status: " + status);
+        });
+        alert("Save Done");
+      }
+    }
+  
+    function clearConfig() {
+      if (confirm("Want to Clear?")) {
+        // code clearing
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctxo.clearRect(0, 0, canvas.width, canvas.height);
+        areas_rect = [];
+        alert("Clear Done");
+      }
+    }
+  
+    function handleMouseDown(e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+  
+      // save the starting x/y of the rectangle
+      startX = parseInt(e.clientX - offsetX);
+      startY = parseInt(e.clientY - offsetY);
+  
+      // set a flag indicating the drag has begun
+      isDown = true;
+    }
+  
+    function handleMouseUp(e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      // the drag is over, clear the dragging flag
+      isDown = false;
+      ctxo.strokeRect(prevStartX, prevStartY, prevWidth, prevHeight);
+      
+      areas_rect.push([prevStartX, prevStartY, prevWidth, prevHeight]);
+      //console.log(areas_rect);
+    }
+  
+    function handleMouseOut(e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      // the drag is over, clear the dragging flag
+      isDown = false;
+    }
+  
+    function handleMouseMove(e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      // if we're not dragging, just return
+      if (!isDown) {
+        return;
+      }
+  
+      // get the current mouse position
+      mouseX = parseInt(e.clientX - offsetX);
+      mouseY = parseInt(e.clientY - offsetY);
+  
+      // Put your mousemove stuff here
+  
+      // calculate the rectangle width/height based
+      // on starting vs current mouse position
+      var width = mouseX - startX;
+      var height = mouseY - startY;
+  
+      // clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+      // draw a new rect from the start position
+      // to the current mouse position
+      ctx.strokeRect(startX, startY, width, height);
+  
+      prevStartX = startX;
+      prevStartY = startY;
+  
+      prevWidth = width;
+      prevHeight = height;
+    }
+  
+    // listen for mouse events
+    $("#canvas").mousedown(function (e) {
+      handleMouseDown(e);
+    });
+    $("#canvas").mousemove(function (e) {
+      handleMouseMove(e);
+    });
+    $("#canvas").mouseup(function (e) {
+      handleMouseUp(e);
+    });
+    $("#canvas").mouseout(function (e) {
+      handleMouseOut(e);
+    });
+  </script>
+  
